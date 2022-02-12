@@ -1,0 +1,6 @@
+*.json
+AddressBook/bin/
+AddressBook/obj/
+AddressBook/notes.txt
+.vs/
+.git/
