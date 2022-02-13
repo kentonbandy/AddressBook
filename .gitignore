@@ -1,4 +1,4 @@
-*.json
+AddressBook.json
 AddressBook/bin/
 AddressBook/obj/
 AddressBook/notes.txt

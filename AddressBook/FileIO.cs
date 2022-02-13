@@ -9,21 +9,27 @@ namespace AddressBook
 {
     internal class FileIO
     {
-        public string path { get; set; }
-        public string filename { get; set; }
+        public string Path { get; set; }
+        public string Filename { get; set; }
 
         public FileIO()
         {
-            path = ".";
-            filename = "AddressBook.json";
+            Path = "../../../../";
+            Filename = "AddressBook.json";
+        }
+
+        public FileIO(string path, string filename)
+        {
+            this.Path = path;
+            this.Filename = filename;
         }
 
         public string FullPath()
         {
-            return path + "/" + filename;
+            return Path + Filename;
         }
 
-        public bool SaveData(AddressBook data)
+        public bool SaveData(AddressBookModel data)
         {
             string jsonString = JsonSerializer.Serialize(data);
             try
@@ -37,7 +43,7 @@ namespace AddressBook
             }
         }
 
-        public AddressBook? LoadData()
+        public AddressBookModel? LoadData()
         {
             string? jsonString = null;
             if (File.Exists(FullPath()))
@@ -48,17 +54,20 @@ namespace AddressBook
                 }
                 catch (Exception) { }
             }
-            else
+            else if (Directory.Exists(Path))
             {
-                jsonString = JsonSerializer.Serialize(new AddressBook());
                 try
                 {
+                    AddressBookModel addressBook = new();
+                    jsonString = JsonSerializer.Serialize(addressBook);
                     File.WriteAllText(FullPath(), jsonString);
+                    return addressBook;
                 }
                 catch (Exception) { }
+
             }
 
-            return jsonString == null ? null : JsonSerializer.Deserialize<AddressBook>(jsonString);
+            return jsonString == null ? null : JsonSerializer.Deserialize<AddressBookModel>(jsonString);
         }
     }
 }

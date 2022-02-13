@@ -7,27 +7,36 @@ using System.Text.Json;
 
 namespace AddressBook
 {
-    internal class AddressBook
+    internal class AddressBookModel
     {
+        public long GuidMarker { get; set; }
         public List<AddressEntryModel> Entries { get; set; }
 
-        public AddressBook()
+        public AddressBookModel()
         {
+            GuidMarker = 0;
             Entries = new List<AddressEntryModel>();
         }
 
-        public AddressBook(List<AddressEntryModel> entries, string path)
+        public AddressBookModel(long GuidMarker, List<AddressEntryModel> Entries)
         {
-            Entries = entries;
+            this.GuidMarker = GuidMarker;
+            this.Entries = Entries;
         }
 
         public bool Add(AddressEntryModel entry)
         {
             if (entry == null) return false;
             int c = Entries.Count;
+            entry.Guid = GuidMarker;
             Entries.Add(entry);
             int c2 = Entries.Count;
-            return c2 > c;
+            if (c2 > c)
+            {
+                GuidMarker++;
+                return true;
+            }
+            return false;
         }
     }
 }

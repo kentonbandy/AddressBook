@@ -1,6 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using AddressBook;
 
+FileIO fileIO = new FileIO();
+AddressBookModel? addressBook = fileIO.LoadData();
+CLIOut cliOut = new();
 
-// check for json file, create new template file if not found, notify user of status
-// display main menu
-
+if (addressBook == null)
+{
+    cliOut.LoadError();
+    Environment.Exit(1);
+}
+else
+{
+    Console.WriteLine("Success!");
+}
