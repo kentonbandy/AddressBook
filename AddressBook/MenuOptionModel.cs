@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace AddressBook
 {
-    internal class MenuModel
+    internal class MenuOptionModel
     {
+        public int Number { get; set; }
         public string Name { get; set; }
-        public List<MenuOptionModel> Options { get; set; }
+        public Action Action { get; set; }
 
-        public MenuModel(string name, List<MenuOptionModel> options)
+        public MenuOptionModel(int number, string name, Action action)
         {
+            Number = number;
             Name = name;
-            Options = options;
+            Action = action;
         }
     }
 }

@@ -58,16 +58,20 @@ namespace AddressBook
             {
                 try
                 {
-                    AddressBookModel addressBook = new();
-                    jsonString = JsonSerializer.Serialize(addressBook);
+                    AddressBookModel newAddressBook = new();
+                    jsonString = JsonSerializer.Serialize(newAddressBook);
                     File.WriteAllText(FullPath(), jsonString);
-                    return addressBook;
+                    return newAddressBook;
                 }
                 catch (Exception) { }
 
             }
 
-            return jsonString == null ? null : JsonSerializer.Deserialize<AddressBookModel>(jsonString);
+            if (jsonString == null) return null;
+            AddressBookModel? addressBook = JsonSerializer.Deserialize<AddressBookModel>(jsonString);
+            if (addressBook == null) return null;
+            addressBook.Entries = addressBook.Entries.OrderBy(e => e.LastName).ToList();
+            return addressBook;
         }
     }
 }
