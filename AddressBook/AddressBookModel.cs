@@ -27,15 +27,9 @@ namespace AddressBook
         public bool Add(AddressEntryModel entry)
         {
             if (entry == null) return false;
-            int c = Entries.Count;
             entry.Guid = GuidMarker;
             Entries.Add(entry);
-            int c2 = Entries.Count;
-            if (c2 > c)
-            {
-                GuidMarker++;
-                return true;
-            }
+            GuidMarker += 1;
             return false;
         }
     }
