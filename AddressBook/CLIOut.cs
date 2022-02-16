@@ -33,7 +33,7 @@ namespace AddressBook
         {
             for (int i = 0; i < entries.Count; i++)
             {
-                WriteLine($"{i+1}. {entries[i].LastName}, {entries[i].FirstName}");
+                WriteLine($"{i+1}. {clampToWidth(entries[i].LastName + ",", 12)}{entries[i].FirstName}");
             }
             WriteLine();
             WriteLine($"Page {current} of {total}");
@@ -43,6 +43,11 @@ namespace AddressBook
             WriteLine("To navigate from page to page, type 'next' or 'prev'.");
             WriteLine("Type 'back' or 'main' to return to the main menu.");
             Arrows();
+        }
+
+        public void ViewGroups(List<string> groups)
+        {
+            
         }
 
         public void Menu(MenuModel menu)

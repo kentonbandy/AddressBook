@@ -97,7 +97,24 @@ void viewAllEntries()
 
 void ViewGroups()
 {
-
+    Dictionary<string, List<AddressEntryModel>> groups = new();
+    foreach (AddressEntryModel entry in addressBook.Entries)
+    {
+        foreach (string group in entry.Groups)
+        {
+            if (groups.ContainsKey(group))
+            {
+                groups[group].Add(entry);
+            }
+            else
+            {
+                groups[group] = new List<AddressEntryModel>() { entry };
+            }
+        }
+    }
+    List<string> groupStrings = new List<string>(groups.Keys);
+    groupStrings.Sort();
+    cliOut.ViewGroups(groupStrings);
 }
 
 void SearchForEntry()
@@ -115,18 +132,7 @@ void CreateNewEntry()
     AddressEntryModel entry = new();
     List<string> groups = new();
     cliOut.NewEntry();
-    Dictionary<string, string> entryDict = new()
-    {
-        { "FirstName", "" },
-        { "LastName", "" },
-        { "Address1", "" },
-        { "Address2", "" },
-        { "City", "" },
-        { "Area", "" },
-        { "Country", "" },
-        { "PostalCode", "" },
-        { "Phone", "" }
-    };
+    var entryDict = GetBlankFields();
     string userInput = "";
     while (userInput != "y" && userInput != "yes" && userInput != "n" && userInput != "no")
     {
@@ -138,6 +144,11 @@ void CreateNewEntry()
     entry.IsInternational = userInput == "n" || userInput == "no";
     for (int i = 1; i < 10; i++)
     {
+        if (!entry.IsInternational && entryFieldKey[i] == "Country")
+        {
+            entryDict[entryFieldKey[i]] = "USA";
+            continue;
+        }
         cliOut.NewEntry(entry.Alias(i));
         userInput = cliIn.GetStringInput() ?? "";
         if (userInput.ToLower() == "quit") Environment.Exit(0);
@@ -314,6 +325,22 @@ int MenuSelection(MenuModel menu)
         }
         cliOut.ValidMenuSelection();
     }
+}
+
+Dictionary<string, string> GetBlankFields()
+{
+    return new()
+    {
+        { "FirstName", "" },
+        { "LastName", "" },
+        { "Address1", "" },
+        { "Address2", "" },
+        { "City", "" },
+        { "Area", "" },
+        { "Country", "" },
+        { "PostalCode", "" },
+        { "Phone", "" }
+    };
 }
 
 
