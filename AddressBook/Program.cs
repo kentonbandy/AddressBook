@@ -156,7 +156,7 @@ void CreateNewEntry()
     }
     while (true)
     {
-        cliOut.ListGroups(groups);
+        cliOut.ListEntryGroups(groups);
         if (!GetYesNo("Would you like to add a group?")) break;
         cliOut.AddGroup();
         string userinput = cliIn.GetStringInput() ?? "";
@@ -175,7 +175,7 @@ void CreateNewEntry()
     entry.Groups = groups;
 
     addressBook.Add(entry);
-    cliOut.EntrySuccess(SaveLoad());
+    cliOut.EntryAddedSuccess(SaveLoad());
 }
 
 void CreateNewGroup()
@@ -235,51 +235,50 @@ bool EntryDetails(AddressEntryModel entry)
             cliOut.NoSuchOption();
             continue;
         }
-        if (userInt > 0 && userInt < 11)
+        if (entry.GetFieldByInt == null)
         {
-            cliOut.Edit(EditField(entry, userInt));
+            cliOut.NoSuchOption();
+            continue;
         }
+        if (EditField(entry, userInt)) return true;
+        else return false;
     }
 
 }
 
-// true: changes were made successfully
+// true: main menu, false; view entries
 bool EditField(AddressEntryModel entry, int userInt)
-{
-
-    //bug this method of deserializing into a dict doesn't work because not all fields are strings. either use a struct or create a dict
-
-    // create a json version of the entry, convert this to a dictionary
-    string jsonEntry = JsonSerializer.Serialize(entry);
-    Dictionary<string, string>? dictEntry = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonEntry);
-
+{    
     // display the field info to the user, prompt user to enter new value
     string? userInput;
     string? field = entry.Alias(userInt);
     string property = entryFieldKey[userInt];
     while (true)
     {
-        cliOut.EditEntryField(field, dictEntry == null ? "" : dictEntry[property]);
+        cliOut.EditEntryField(field, entry.GetFieldByInt(userInt));
         userInput = cliIn.GetStringInput();
-        if (userInput == "")
+        if (userInput == "quit") Environment.Exit(0);
+        else if (userInput == "main") return true;
+        if (userInput == "" || userInput == null)
         {
             cliOut.NoChanges();
             return false;
         }
-         if (GetYesNo($"Changing {field} to {userInput}. Are you sure? y/n"))
+        if (GetYesNo($"Changing {field} to {userInput}. Are you sure? y/n"))
         {
-            dictEntry[property] = userInput;
-            string newEntryJson = JsonSerializer.Serialize(dictEntry);
-            addressBook.Entries.Remove(entry);
-            AddressEntryModel newEntry = JsonSerializer.Deserialize<AddressEntryModel>(newEntryJson);
-            if (newEntry != null)
+            if (entry.UpdateFieldByInt(userInt, userInput))
             {
-                addressBook.Entries.Add(newEntry);
-                return SaveLoad();
+                if (fileIO.SaveData(addressBook)) cliOut.EntryUpdateSuccess();
+                else cliOut.SaveError();
+                return false;
             }
+
+        }
+        else
+        {
+            cliOut.NoChanges();
             return false;
         }
-         else cliOut.NoChanges();
     }
 }
 

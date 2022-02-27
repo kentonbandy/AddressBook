@@ -60,18 +60,47 @@ namespace AddressBook
             if (i < 1 || i > 10) return null;
             Dictionary<int, string> aliases = new()
             {
-                {1, "first name"},
-                {2, "last name"},
-                {3, "address line 1"},
-                {4, "address line 2"},
-                {5, "city"},
-                {6, "state/area"},
-                {7, "country"},
-                {8, "postal/zip code"},
-                {9, "phone number"},
-                {10, "groups"}
+                { 1, "first name" },
+                { 2, "last name" },
+                { 3, "address line 1" },
+                { 4, "address line 2" },
+                { 5, "city" },
+                { 6, "state/area" },
+                { 7, "country" },
+                { 8, "postal/zip code" },
+                { 9, "phone number" },
+                { 10, "groups" }
             };
             return aliases[i];
+        }
+
+        public bool UpdateFieldByInt(int i, string newData)
+        {
+            if (i == 1) FirstName = newData;
+            else if (i == 2) LastName = newData;
+            else if (i == 3) Address1 = newData;
+            else if (i == 4) Address2 = newData;
+            else if (i == 5) City = newData;
+            else if (i == 6) Area = newData;
+            else if (i == 7) Country = newData;
+            else if (i == 8) PostalCode = newData;
+            else if (i == 9) Phone = newData;
+            else return false;
+            return true;
+        }
+
+        public string GetFieldByInt(int i)
+        {
+            if (i == 1) return FirstName;
+            else if (i == 2) return LastName;
+            else if (i == 3) return Address1;
+            else if (i == 4) return Address2 ?? "";
+            else if (i == 5) return City;
+            else if (i == 6) return Area;
+            else if (i == 7) return Country;
+            else if (i == 8) return PostalCode;
+            else if (i == 9) return Phone ?? "";
+            else return null;
         }
     }
 }

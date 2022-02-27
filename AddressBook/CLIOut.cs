@@ -126,10 +126,11 @@ namespace AddressBook
             else WriteLine("Something went wrong during entry deletion.");
         }
 
-        public void Edit(bool wasSuccessful)
+        public bool Edit(bool wasSuccessful)
         {
             if (wasSuccessful) WriteLine("Entry field successfully updated.");
             else WriteLine("No updates were made.");
+            return wasSuccessful;
         }
 
         public void EditEntryField(string field, string exising)
@@ -184,7 +185,7 @@ namespace AddressBook
             Arrows();
         }
 
-        public void ListGroups(List<string> groups)
+        public void ListEntryGroups(List<string> groups)
         {
             if (groups.Any())
             {
@@ -205,9 +206,19 @@ namespace AddressBook
             Arrows();
         }
 
-        public void EntrySuccess(bool success = true)
+        public void EntryAddedSuccess(bool success = true)
         {
             WriteLine("Entry successfully added.");
+        }
+
+        public void EntryUpdateSuccess()
+        {
+            WriteLine("Entry successfully updated.");
+        }
+
+        public void SaveError()
+        {
+            WriteLine("There was a save error; file not updated.");
         }
 
 
