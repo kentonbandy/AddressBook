@@ -47,7 +47,12 @@ namespace AddressBook
 
         public void ViewGroups(List<string> groups)
         {
-            
+            foreach (string group in groups)
+            {
+                WriteLine(group);
+            }
+            WriteLine("Enter the name of a group to view the entries in that group, or type 'back' or 'main' to return to the main menu.");
+            Arrows();
         }
 
         public void Menu(MenuModel menu)

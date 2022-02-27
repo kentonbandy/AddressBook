@@ -114,7 +114,17 @@ void ViewGroups()
     }
     List<string> groupStrings = new List<string>(groups.Keys);
     groupStrings.Sort();
-    cliOut.ViewGroups(groupStrings);
+    while (true)
+    {
+        cliOut.ViewGroups(groupStrings);
+        string userInput = cliIn.GetStringInput() ?? "";
+        if (!groupStrings.Contains(userInput))
+        {
+            cliOut.NoSuchOption();
+            continue;
+        }
+        //kenny work on this
+    }
 }
 
 void SearchForEntry()
